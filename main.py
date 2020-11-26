@@ -1,6 +1,5 @@
 from biodatacut import *
-import matplotlib.pyplot as plt
-from edaprossing import *
+from eda import *
 
 
 def eda_signal_cut_and_save(filepath, subject, exp_time, start_time, channel=2, show=True):
