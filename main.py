@@ -48,27 +48,4 @@ if __name__ == "__main__":
             eda, saveasfilename = eda_signal_cut_and_save(file, k + 1, i + 1, cut_time[k][i])
             eda_prossing(eda, saveasfilename)
 
-    # eda_signal_cut_and_save(filepath, 1, 1, 778)
-    # eda_signal_cut_and_save(filepath, 1, 2, 924)
-    # eda_signal_cut_and_save(filepath, 1, 3, 1019)
-    # eda_signal_cut_and_save(filepath, 1, 4, 1189)
 
-    # eda_signal_cut_and_save(filepath, 2, 1, 388)
-    # eda_signal_cut_and_save(filepath, 2, 2, 579)
-    # eda_signal_cut_and_save(filepath, 2, 3, 823)
-    # eda_signal_cut_and_save(filepath, 2, 4, 901)
-
-    # eda_signal_cut_and_save(filepath, 3, 1, 578)
-    # eda_signal_cut_and_save(filepath, 3, 2, 714)
-    # eda_signal_cut_and_save(filepath, 3, 3, 876)
-    # eda_signal_cut_and_save(filepath, 3, 4, 989)
-
-    # eda_signal_cut_and_save(filepath, 4, 1, 283)
-    # eda_signal_cut_and_save(filepath, 4, 2, 475)
-    # eda_signal_cut_and_save(filepath, 4, 3, 630)
-    # eda_signal_cut_and_save(filepath, 4, 4, 739)
-
-    # eda_signal_cut_and_save(filepath, 5, 1, 447)
-    # eda_signal_cut_and_save(filepath, 5, 2, 483)
-    # eda_signal_cut_and_save(filepath, 5, 3, 623)
-    # eda_signal_cut_and_save(filepath, 5, 4, 712)
