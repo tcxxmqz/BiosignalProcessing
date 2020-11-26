@@ -1,20 +1,19 @@
 from matplotlib.ticker import MultipleLocator
 from numpy.core.multiarray import ndarray
-
 import neurokit2 as nk
 from biosppy.plotting import *
 
 
-def plot_eda_qz(ts: ndarray = None,
-                raw: ndarray = None,
-                filtered: ndarray = None,
-                onsets: ndarray = None,
-                offsets: ndarray = None,
-                peaks: ndarray = None,
-                eda_phasic_diffandsmoothed: ndarray = None,
-                path: str = None,
-                show: bool = False,
-                stimulus: bool = False):
+def plot_eda(ts: ndarray = None,
+             raw: ndarray = None,
+             filtered: ndarray = None,
+             onsets: ndarray = None,
+             offsets: ndarray = None,
+             peaks: ndarray = None,
+             eda_phasic_diffandsmoothed: ndarray = None,
+             path: str = None,
+             show: bool = False,
+             stimulus: bool = False):
     """Create a summary plot from the output of signals.eda.eda.
 
     Parameters
@@ -146,8 +145,7 @@ def plot_scr(ts: ndarray = None,
              onsets: ndarray = None,
              offsets: ndarray = None,
              path: str = None,
-             show: bool = False,
-             stimulus: object = False):
+             show: bool = False):
     """绘制SCR到图像
 
         Parameters
@@ -164,9 +162,6 @@ def plot_scr(ts: ndarray = None,
             If provided, the plot will be saved to the specified file.
         show : bool, optional
             If True, show the plot immediately.
-        stimulus : bool, optional
-            If True, show the stimulus.
-            绘制预测到的刺激发生时间, 以零点开始的刺激延时作为后续刺激的校准，默认不绘制。
         modified by qz at 2020-10-28
 
         """
@@ -187,6 +182,8 @@ def plot_scr(ts: ndarray = None,
     xmjorLocator = MultipleLocator(2)
     ax1.xaxis.set_major_locator(xmjorLocator)
 
+    ax1.set_xlim(0, 60)
+
     ymin = np.min(filtered)
     ymax = np.max(filtered)
     alpha = 0.1 * (ymax - ymin)
@@ -196,24 +193,16 @@ def plot_scr(ts: ndarray = None,
     ax1.plot(ts, filtered, label='EDA-Filtered')
 
     # 绘制onsets, offsets点到图像
-    ax1.scatter(ts[onsets], filtered[onsets], marker='o', color='b', label='SCR-Onsets')
-    ax1.scatter(ts[offsets], filtered[offsets], marker='x', color='green', label='SCR-Offsets')
+    # ax1.scatter(ts[onsets], filtered[onsets], marker='o', color='b', label='SCR-Onsets')
+    # ax1.scatter(ts[offsets], filtered[offsets], marker='x', color='green', label='SCR-Offsets')
 
     # SCR反应区域标记上颜色
     for i in range(0, len(ts[onsets]) - 1):
         ax1.axvspan(xmin=ts[onsets][i], xmax=ts[offsets][i], facecolor='gray', alpha=0.4)
     ax1.axvspan(xmin=ts[onsets][-1], xmax=ts[offsets][-1], facecolor='gray', alpha=0.4, label='SCR')
 
-    # 预测刺激开始的时间，用红色竖线表示
-    if stimulus:
-        stimulus_list = onsets - onsets[0]
-        ax1.vlines(ts[stimulus_list], ymin, ymax,
-                   color='r',
-                   linewidth=MINOR_LW,
-                   label='Stimulus')
-
     ax1.set_ylabel('Amplitude(uS)')
-    ax1.legend(loc="upper left", fontsize=3)
+    ax1.legend(loc="upper left", fontsize=4)
     ax1.grid()
 
     # make layout tight
@@ -237,7 +226,7 @@ def plot_scr(ts: ndarray = None,
         plt.close(fig)
 
 
-def eda_prossing(raw_signal, path=None):
+def eda_process(raw_signal, path=None):
     """
     皮电信号处理，输入未处理的皮电信号，输出scr监测后的图像。
 

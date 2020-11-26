@@ -1,3 +1,5 @@
+from typing import List
+
 from biodatacut import *
 from eda import *
 
@@ -42,10 +44,13 @@ if __name__ == "__main__":
                 [578, 714, 879, 989],
                 [283, 475, 630, 739],
                 [447, 483, 623, 712]]
-    for k in range(5):
-        for i in range(4):
-            file = filepath[k]
-            eda, saveasfilename = eda_signal_cut_and_save(file, k + 1, i + 1, cut_time[k][i])
-            eda_prossing(eda, saveasfilename)
+    # for k in range(5):
+    #     for i in range(4):
+    #         file = filepath[k]
+    #         eda, saveasfilename = eda_signal_cut_and_save(file, k + 1, i + 1, cut_time[k][i])
+    #         eda_process(eda, saveasfilename)
 
+file = filepath[0]
+eda, saveasfilename = eda_signal_cut_and_save(file, 1, 2, cut_time[0][1])
+eda_process(eda, saveasfilename)
 
