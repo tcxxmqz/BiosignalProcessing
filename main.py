@@ -18,7 +18,7 @@ def eda_signal_cut_and_save(filepath, subject, exp_time, start_time, channel=2, 
 
     # filepath = r"C:\PythonFiles\BiosignalProcessing\data\exper1.mat"
 
-    saveasfilename = filepath[:-4] + "_" + str(subject) + "_" + str(exp_time) + "_eda.txt"
+    saveasfilename = filepath[:-5] + "_" + str(subject) + "_" + str(exp_time) + "_eda.txt"
 
     stop_time = start_time + exp[exp_time - 1]
 
@@ -32,9 +32,21 @@ def eda_signal_cut_and_save(filepath, subject, exp_time, start_time, channel=2, 
 
 
 if __name__ == "__main__":
-    filepath = r"D:\11.21实验\1\Untitled1.mat"
-    eda, saveasfilename = eda_signal_cut_and_save(filepath, 1, 1, 778)
-    eda_prossing(eda, saveasfilename)
+    filepath = [r"C:\Python Files\BiosignalProcessing\data\1\exper1.mat",
+                r"C:\Python Files\BiosignalProcessing\data\2\exper2.mat",
+                r"C:\Python Files\BiosignalProcessing\data\3\exper3.mat",
+                r"C:\Python Files\BiosignalProcessing\data\4\exper4.mat",
+                r"C:\Python Files\BiosignalProcessing\data\5\exper5.mat"]
+    cuttime = [[778, 924, 1019, 1189],
+               [388, 579, 823, 901],
+               [578, 714, 879, 989],
+               [283, 475, 630, 739],
+               [447, 483, 623, 712]]
+    for k in range(5):
+        for i in range(4):
+            file = filepath[k]
+            eda, saveasfilename = eda_signal_cut_and_save(file, k+1, i+1, cuttime[k][i])
+            eda_prossing(eda, saveasfilename)
 
     # eda_signal_cut_and_save(filepath, 1, 1, 778)
     # eda_signal_cut_and_save(filepath, 1, 2, 924)
