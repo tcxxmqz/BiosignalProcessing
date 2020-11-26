@@ -1,7 +1,5 @@
 import neurokit2 as nk
-import numpy as np
-import matplotlib.pyplot as plt
-import biosppy.plotting as bplt
+from biosppy.plotting import *
 
 
 def eda_prossing(raw_signal, path=None):
@@ -9,6 +7,7 @@ def eda_prossing(raw_signal, path=None):
     皮电信号处理，输入未处理的皮电信号，输出scr监测后的图像。
 
     :param raw_signal: 未处理的皮电信号
+    :param path: 文件保存的地址
     :return: 无
     """
 
@@ -48,6 +47,6 @@ def eda_prossing(raw_signal, path=None):
 
     # scr监测与绘图输出保存
     if path is not None:
-        bplt.plot_scr(ts=ts, filtered=eda_cleaned, onsets=features[0], offsets=features[1], show=True, path=path)
+        plot_scr(ts=ts, filtered=eda_cleaned, onsets=features[0], offsets=features[1], show=True, path=path)
     else:
-        bplt.plot_scr(ts=ts, filtered=eda_cleaned, onsets=features[0], offsets=features[1], show=True)
+        plot_scr(ts=ts, filtered=eda_cleaned, onsets=features[0], offsets=features[1], show=True)
