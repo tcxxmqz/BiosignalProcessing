@@ -302,14 +302,14 @@ def plot_scr_v2(ts: ndarray = None,
     ax1.vlines(ts[0], ymin, ymax, color='b', linestyles="--", linewidth=MINOR_LW, label='进入场景')
     ax1.vlines(ts[15 * sampling_rate], ymin, ymax, color='g', linestyles="--", linewidth=MINOR_LW, label='轮椅启动')
     obs_distance_time = [45, 30, 26, 24]  # 距离障碍物最近时的时间点
-    ax1.vlines(ts[obs_distance_time[exper-1] * sampling_rate], ymin, ymax, color='r', linestyles="--",
+    ax1.vlines(ts[obs_distance_time[exper - 1] * sampling_rate], ymin, ymax, color='r', linestyles="--",
                linewidth=MINOR_LW, label='距离最近')
     wheelchair_stop_time = [55, 36, 30, 27]
     ax1.vlines(ts[wheelchair_stop_time[exper - 1] * sampling_rate], ymin, ymax, color='y', linestyles="--",
                linewidth=MINOR_LW, label='轮椅停止')
 
     ax1.set_ylabel('Amplitude(uS)')
-    ax1.legend(loc="upper right", fontsize=6)
+    ax1.legend(loc="upper right", fontsize=5)
     ax1.grid()
 
     # make layout tight
@@ -324,6 +324,7 @@ def plot_scr_v2(ts: ndarray = None,
             path = root + '_scr.png'
 
         fig.savefig(path, dpi=300, bbox_inches='tight')
+        print("plot_scr处理后的图像已经保存到文件路径{}".format(path))
 
     # show
     if show:
@@ -380,7 +381,7 @@ def eda_process(raw_signal, exper, path=None):
     # scr监测与绘图输出保存
     if path is not None:
         plot_scr_v2(ts=ts, sampling_rate=downsize_rate, filtered=eda_cleaned, onsets=features[0], offsets=features[1],
-                    exper=exper, show=True, path=path)
+                    exper=exper, show=False, path=path)
     else:
         plot_scr_v2(ts=ts, sampling_rate=downsize_rate, filtered=eda_cleaned, onsets=features[0], offsets=features[1],
-                    exper=exper, show=True)
+                    exper=exper, show=False)
