@@ -52,5 +52,4 @@ if __name__ == "__main__":
 
 file = filepath[0]
 eda, saveasfilename = eda_signal_cut_and_save(file, 1, 2, cut_time[0][1])
-eda_process(eda, saveasfilename)
-
+eda_process(eda, 2, saveasfilename)
