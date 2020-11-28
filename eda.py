@@ -1,7 +1,36 @@
-from matplotlib.ticker import MultipleLocator
 from numpy.core.multiarray import ndarray
 import neurokit2 as nk
+from biodatacut import *
 from biosppy.plotting import *
+
+
+def eda_signal_cut_and_save(file_path, subject, exp_time, start_time, channel=2, show=True):
+    """
+    切分皮电数据，输入文件路径，第几位受试者，第几次实验，实验开始截取数据的时间点，数据所在的通道；自动保存切分后的文件到输入文件所在的路径
+
+    :param file_path: 原始文件路径
+    :param subject: 受试者位次
+    :param exp_time: 实验位次
+    :param start_time: 开始切分时间点
+    :param channel: eda信号所在通道
+    :param show: 是否绘图
+    :return: 分段后的信号
+    """
+    exp = [60, 40, 34, 30]
+
+    # filepath = r"C:\PythonFiles\BiosignalProcessing\data\exper1.mat"
+
+    save_as_filename = file_path[:-5] + "_" + str(subject) + "_" + str(exp_time) + "_eda.txt"
+
+    stop_time = start_time + exp[exp_time - 1]
+
+    eda_signal = biosignal_cut(file_path, start_time, stop_time, channel=channel, save_filepath=save_as_filename)
+
+    if show is True:
+        plt.plot(eda_signal)
+        plt.show()
+
+    return eda_signal, save_as_filename
 
 
 def plot_eda(ts: ndarray = None,
@@ -309,6 +338,7 @@ def plot_scr_v2(ts: ndarray = None,
                linewidth=MINOR_LW, label='轮椅停止')
 
     ax1.set_ylabel('Amplitude(uS)')
+    ax1.set_xlabel('Time(s)')
     ax1.legend(loc="upper right", fontsize=5)
     ax1.grid()
 
@@ -323,7 +353,7 @@ def plot_scr_v2(ts: ndarray = None,
         if ext not in ['png', 'jpg']:
             path = root + '_scr.png'
 
-        fig.savefig(path, dpi=300, bbox_inches='tight')
+        fig.savefig(path, dpi=400, bbox_inches='tight')
         print("plot_scr处理后的图像已经保存到文件路径{}".format(path))
 
     # show
@@ -338,8 +368,8 @@ def eda_process(raw_signal, exper, path=None):
     """
     皮电信号处理，输入未处理的皮电信号，输出scr监测后的图像。
 
-    :param exper:
     :param raw_signal: 未处理的皮电信号
+    :param exper: 第几位实验者
     :param path: 文件保存的地址
     :return: 无
     """
@@ -349,7 +379,7 @@ def eda_process(raw_signal, exper, path=None):
     down_size = 2000 / downsize_rate
     # raw_signal = np.loadtxt(filepath)
     raw_signal = raw_signal[::int(down_size)]
-    sampling_rate = int(2000 / down_size)
+    # sampling_rate = int(2000 / down_size)
     # plt.plot(raw_signal)
     # plt.show()
 
@@ -368,7 +398,7 @@ def eda_process(raw_signal, exper, path=None):
 
     # 时间轴
     length = len(eda_cleaned)
-    T = (length - 1) / sampling_rate
+    T = (length - 1) / downsize_rate
     ts = np.linspace(0, T, length, endpoint=True)
 
     # 绘图
