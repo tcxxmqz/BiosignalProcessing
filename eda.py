@@ -124,7 +124,7 @@ def plot_eda(ts: ndarray = None,
                    label='Stimulus')
 
     ax2.set_ylabel('Amplitude(uS)')
-    ax2.legend(loc="upper left", fontsize=6)
+    ax2.legend(loc="upper right", fontsize=5)
     ax2.grid()
 
     # eda_phasic_diffandsmoothed
@@ -143,9 +143,9 @@ def plot_eda(ts: ndarray = None,
         ax3.axvspan(xmin=ts[onsets][i], xmax=ts[offsets][i], facecolor='gray', alpha=0.4)
     ax3.axvspan(xmin=ts[onsets][-1], xmax=ts[offsets][-1], facecolor='gray', alpha=0.4, label='SCR')
 
-    ax3.set_xlabel('Time (s)')
+    ax3.set_xlabel('Time(s)')
     ax3.set_ylabel('Amplitude(uS)')
-    ax3.legend(loc="upper left", fontsize=3)
+    ax3.legend(loc="upper right", fontsize=5)
     ax3.grid()
 
     # make layout tight
@@ -295,13 +295,13 @@ def plot_scr_v2(ts: ndarray = None,
     plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
 
     fig = plt.figure()
-    fig.suptitle('EDA处理及SCR检测\n')
+    fig.suptitle('EDA处理及SCR检测\n' + path)
 
     # filtered signal with onsets, peaks, SCR
     ax1 = fig.add_subplot(311)
 
     # 给子图设置标题
-    ax1.set_title(path)
+    # ax1.set_title(path)
 
     # 设置x轴刻度
     xmjorLocator = MultipleLocator(2)
@@ -353,7 +353,7 @@ def plot_scr_v2(ts: ndarray = None,
         if ext not in ['png', 'jpg']:
             path = root + '_scr.png'
 
-        fig.savefig(path, dpi=400, bbox_inches='tight')
+        fig.savefig(path, dpi=300, bbox_inches='tight')
         print("plot_scr处理后的图像已经保存到文件路径{}".format(path))
 
     # show
