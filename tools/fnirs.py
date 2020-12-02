@@ -9,12 +9,12 @@ def fnirs_signal_cut_and_save(file_path, subject, exp_time, start_time, show_CHx
     """
     输入脑血流文件路径，返回剪切后的所有通道信号并保存，返回值类型是pandas的Dataframe表格，同时返回保存文件的路径。
 
-    :param file_path:
-    :param subject:
-    :param exp_time:
-    :param start_time:
-    :param show_CHx:
-    :return:
+    :param file_path:脑血流数据csv文件的路径
+    :param subject:第几位受试者
+    :param exp_time:此受试者的第几次实验
+    :param start_time:此次实验的开始时间点
+    :param show_CHx:绘制脑血流图像，输入None不绘制图像；输入通道名称，如CH4，绘制此通道的数据；输入all，绘制所有通道的数据到一个图
+    :return:返回剪切后的数据，为DataFrame类型的变量fnirs_signal；返回剪切后的数据csv文件保存位置，为字符串变量
     """
 
     exp = [60, 40, 34, 30]
@@ -45,6 +45,15 @@ def fnirs_signal_cut_and_save(file_path, subject, exp_time, start_time, show_CHx
 
 
 def fnirs_CHx_process(raw_signal, CH: str, path=None, show=False):
+    """
+    脑血流信号处理，输入未处理的信号，要处理的通道名称，保存文件的路径；数据带通滤波后绘制输出。
+
+    :param raw_signal: 未处理的数据，DataFrame类型
+    :param CH: 要处理的数据通道，输入一个通道只处理一个并绘图，输入all全部处理输出并绘制到一张图
+    :param path: 图像文件保存的路径
+    :param show: 是否显示
+    :return: 无
+    """
     if CH == "all":
         CHx = ["CH4", "CH5", "CH6", "CH7", "CH8", "CH9", "CH10", "CH11", "CH12",
                "CH13", "CH14", "CH15", "CH16", "CH17", "CH18", "CH19"]
@@ -81,6 +90,17 @@ def fnirs_CHx_process(raw_signal, CH: str, path=None, show=False):
 
 def fnirs_CHx_plot(ts: ndarray = None, CHx_signal: ndarray = None, CH: str = None,
                    path: str = None, show: bool = True):
+    """
+    绘制一个通道的数据并输出保存
+
+    :param ts: 时间轴
+    :param CHx_signal: 某通道数据
+    :param CH: 通道名称
+    :param path: 图像文件保存的路径
+    :param show: 是否显示
+    :return: 无
+    """
+
     if CH is None:
         print("请输入处理通道CHx到函数fnirs_CHx_plot()!!")
 
@@ -131,6 +151,15 @@ def fnirs_CHx_plot(ts: ndarray = None, CHx_signal: ndarray = None, CH: str = Non
 
 
 def fnirs_allCHx_plot(ts: ndarray = None, fnirs_signal=None, path: str = None, show: bool = True):
+    """
+    绘制所有通道的数据到一张图
+
+    :param ts: 时间轴
+    :param fnirs_signal: 处理或未处理的数据，dataframe格式
+    :param path: 图像保存的路径
+    :param show: 是否显示
+    :return: 无
+    """
     CH = ['CH5', 'CH8', 'CH11', 'CH14', 'CH17', 'CH4', 'CH7', 'CH10',
           'CH13', 'CH16', 'CH19', 'CH6', 'CH9', 'CH12', 'CH15', 'CH18']
 

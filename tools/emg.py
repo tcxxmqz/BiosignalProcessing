@@ -14,7 +14,7 @@ def emg_signal_cut_and_save(file_path, subject, exp_time, start_time, channel=1,
     :param start_time: 开始切分时间点
     :param channel: eda信号所在通道
     :param show: 是否绘图
-    :return: 分段后的信号
+    :return: 分段后的信号数据；数据文件保存的路径
     """
     exp = [60, 40, 34, 30]
 
@@ -34,6 +34,14 @@ def emg_signal_cut_and_save(file_path, subject, exp_time, start_time, channel=1,
 
 
 def emg_process(raw_signal, exper, path=None):
+    """
+    肌电信号处理，简单滤波，绘图
+
+    :param raw_signal: 未处理的肌电信号
+    :param exper: 受试者的第几次实验
+    :param path: 图像保存的路径
+    :return: 无
+    """
 
     print("emg_process()正在处理第{}次实验数据。".format(exper))
 

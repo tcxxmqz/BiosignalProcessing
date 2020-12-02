@@ -38,7 +38,7 @@ def eda_process(raw_signal, exper, path=None):
     皮电信号处理，输入未处理的皮电信号，输出scr监测后的图像。
 
     :param raw_signal: 未处理的皮电信号
-    :param exper: 第几位实验者
+    :param exper: 第几次实验
     :param path: 文件保存的地址
     :return: 无
     """
@@ -84,6 +84,106 @@ def eda_process(raw_signal, exper, path=None):
     else:
         plot_scr_v2(ts=ts, sampling_rate=downsize_rate, filtered=eda_cleaned, onsets=features[0], offsets=features[1],
                     exper=exper, show=False)
+
+
+def plot_scr_v2(ts: ndarray = None,
+                sampling_rate: int = 2000,
+                filtered: ndarray = None,
+                onsets: ndarray = None,
+                offsets: ndarray = None,
+                path: str = None,
+                exper: int = None,
+                show: bool = False):
+    """绘制SCR到图像_v2
+
+        Parameters
+        ----------
+        :param sampling_rate:采样频率
+        :param show:是否显示
+        :param path:文件保存路径
+        :param offsets:scr结束时间点
+        :param onsets:scr开始时间点
+        :param ts:时间轴
+        :param filtered:处理后的数据
+        :param exper: 实验位次，第几次实验。
+
+        """
+
+    plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']  # 用来正常显示中文标签
+    plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
+
+    fig = plt.figure()
+
+    if path is not None:
+        fig.suptitle('EDA处理及SCR检测\n' + path)
+    else:
+        fig.suptitle('EDA处理及SCR检测')
+
+    # filtered signal with onsets, peaks, SCR
+    ax1 = fig.add_subplot(311)
+
+    # 给子图设置标题
+    # ax1.set_title(path)
+
+    # 设置x轴刻度
+    xmjorLocator = MultipleLocator(2)
+    ax1.xaxis.set_major_locator(xmjorLocator)
+
+    # 设置x轴刻度范围
+    ax1.set_xlim(-1, 60)
+
+    ymin = np.min(filtered)
+    ymax = np.max(filtered)
+    alpha = 0.1 * (ymax - ymin)
+    ymax += alpha
+    ymin -= alpha
+
+    ax1.plot(ts, filtered, label='EDA-Filtered')
+
+    # 绘制onsets, offsets点到图像
+    # ax1.scatter(ts[onsets], filtered[onsets], marker='o', color='b', label='SCR-Onsets')
+    # ax1.scatter(ts[offsets], filtered[offsets], marker='x', color='green', label='SCR-Offsets')
+
+    # SCR反应区域标记上颜色
+    for i in range(0, len(ts[onsets]) - 1):
+        ax1.axvspan(xmin=ts[onsets][i], xmax=ts[offsets][i], facecolor='gray', alpha=0.4)
+    ax1.axvspan(xmin=ts[onsets][-1], xmax=ts[offsets][-1], facecolor='gray', alpha=0.4, label='SCR')
+
+    # 绘制实验开始，进入场景，轮椅启动，距离障碍物最近，轮椅停止位置
+    ax1.vlines(ts[0], ymin, ymax, color='b', linestyles="--", linewidth=MINOR_LW, label='进入场景')
+    ax1.vlines(ts[15 * sampling_rate], ymin, ymax, color='g', linestyles="--", linewidth=MINOR_LW, label='轮椅启动')
+    obs_distance_time = [45, 30, 26, 24]  # 距离障碍物最近时的时间点
+    ax1.vlines(ts[obs_distance_time[exper - 1] * sampling_rate], ymin, ymax, color='r', linestyles="--",
+               linewidth=MINOR_LW, label='距离最近')
+    wheelchair_stop_time = [55, 36, 30, 27]
+    ax1.vlines(ts[wheelchair_stop_time[exper - 1] * sampling_rate], ymin, ymax, color='y', linestyles="--",
+               linewidth=MINOR_LW, label='轮椅停止')
+
+    ax1.set_ylabel('uS')
+    ax1.set_xlabel('Time(s)')
+    ax1.legend(loc="upper right", fontsize=5)
+    ax1.grid()
+
+    # make layout tight
+    # fig.tight_layout()
+
+    # save to file
+    if path is not None:
+        path = utils.normpath(path)
+        root, ext = os.path.splitext(path)
+        ext = ext.lower()
+        if ext not in ['png', 'jpg']:
+            path = root + '_scr.png'
+
+        fig.savefig(path, dpi=300, bbox_inches='tight')
+        print("plot_scr()处理后的图像已经保存到文件路径{}".format(path))
+
+    # show
+    if show:
+        plt.show()
+    else:
+        # close
+        plt.close(fig)
 
 
 # def plot_eda(ts: ndarray = None,
@@ -319,103 +419,3 @@ def eda_process(raw_signal, exper, path=None):
 #     else:
 #         # close
 #         plt.close(fig)
-
-
-def plot_scr_v2(ts: ndarray = None,
-                sampling_rate: int = 2000,
-                filtered: ndarray = None,
-                onsets: ndarray = None,
-                offsets: ndarray = None,
-                path: str = None,
-                exper: int = None,
-                show: bool = False):
-    """绘制SCR到图像_v2
-
-        Parameters
-        ----------
-        :param sampling_rate:
-        :param show:
-        :param path:
-        :param offsets:
-        :param onsets:
-        :param ts:
-        :param filtered:
-        :param exper: 实验位次，第几次实验。
-
-        """
-
-    plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']  # 用来正常显示中文标签
-    plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
-
-    fig = plt.figure()
-
-    if path is not None:
-        fig.suptitle('EDA处理及SCR检测\n' + path)
-    else:
-        fig.suptitle('EDA处理及SCR检测')
-
-    # filtered signal with onsets, peaks, SCR
-    ax1 = fig.add_subplot(311)
-
-    # 给子图设置标题
-    # ax1.set_title(path)
-
-    # 设置x轴刻度
-    xmjorLocator = MultipleLocator(2)
-    ax1.xaxis.set_major_locator(xmjorLocator)
-
-    # 设置x轴刻度范围
-    ax1.set_xlim(-1, 60)
-
-    ymin = np.min(filtered)
-    ymax = np.max(filtered)
-    alpha = 0.1 * (ymax - ymin)
-    ymax += alpha
-    ymin -= alpha
-
-    ax1.plot(ts, filtered, label='EDA-Filtered')
-
-    # 绘制onsets, offsets点到图像
-    # ax1.scatter(ts[onsets], filtered[onsets], marker='o', color='b', label='SCR-Onsets')
-    # ax1.scatter(ts[offsets], filtered[offsets], marker='x', color='green', label='SCR-Offsets')
-
-    # SCR反应区域标记上颜色
-    for i in range(0, len(ts[onsets]) - 1):
-        ax1.axvspan(xmin=ts[onsets][i], xmax=ts[offsets][i], facecolor='gray', alpha=0.4)
-    ax1.axvspan(xmin=ts[onsets][-1], xmax=ts[offsets][-1], facecolor='gray', alpha=0.4, label='SCR')
-
-    # 绘制实验开始，进入场景，轮椅启动，距离障碍物最近，轮椅停止位置
-    ax1.vlines(ts[0], ymin, ymax, color='b', linestyles="--", linewidth=MINOR_LW, label='进入场景')
-    ax1.vlines(ts[15 * sampling_rate], ymin, ymax, color='g', linestyles="--", linewidth=MINOR_LW, label='轮椅启动')
-    obs_distance_time = [45, 30, 26, 24]  # 距离障碍物最近时的时间点
-    ax1.vlines(ts[obs_distance_time[exper - 1] * sampling_rate], ymin, ymax, color='r', linestyles="--",
-               linewidth=MINOR_LW, label='距离最近')
-    wheelchair_stop_time = [55, 36, 30, 27]
-    ax1.vlines(ts[wheelchair_stop_time[exper - 1] * sampling_rate], ymin, ymax, color='y', linestyles="--",
-               linewidth=MINOR_LW, label='轮椅停止')
-
-    ax1.set_ylabel('uS')
-    ax1.set_xlabel('Time(s)')
-    ax1.legend(loc="upper right", fontsize=5)
-    ax1.grid()
-
-    # make layout tight
-    # fig.tight_layout()
-
-    # save to file
-    if path is not None:
-        path = utils.normpath(path)
-        root, ext = os.path.splitext(path)
-        ext = ext.lower()
-        if ext not in ['png', 'jpg']:
-            path = root + '_scr.png'
-
-        fig.savefig(path, dpi=300, bbox_inches='tight')
-        print("plot_scr()处理后的图像已经保存到文件路径{}".format(path))
-
-    # show
-    if show:
-        plt.show()
-    else:
-        # close
-        plt.close(fig)
