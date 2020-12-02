@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import biosppy.signals.ecg as biosppy_ecg
-from biodatacut import *
+from tools.biodatacut import *
 
 
 def ecg_signal_cut_and_save(file_path, subject, exp_time, start_time, channel=0, show=True):
