@@ -115,9 +115,9 @@ def plot_scr_v2(ts: ndarray = None,
     fig = plt.figure()
 
     if path is not None:
-        fig.suptitle('EDA处理及SCR检测\n' + path)
+        fig.suptitle('EDA处理及SCR检测\n' + path, fontsize=7)
     else:
-        fig.suptitle('EDA处理及SCR检测')
+        fig.suptitle('EDA处理及SCR检测', fontsize=7)
 
     # filtered signal with onsets, peaks, SCR
     ax1 = fig.add_subplot(311)
@@ -128,6 +128,8 @@ def plot_scr_v2(ts: ndarray = None,
     # 设置x轴刻度
     xmjorLocator = MultipleLocator(2)
     ax1.xaxis.set_major_locator(xmjorLocator)
+
+    ax1.tick_params(labelsize=6)
 
     # 设置x轴刻度范围
     ax1.set_xlim(-1, 60)

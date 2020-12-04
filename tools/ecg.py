@@ -13,7 +13,7 @@ def ecg_signal_cut_and_save(file_path, subject, exp_time, start_time, channel=0,
     :param start_time: 开始切分时间点
     :param channel: ecg信号所在通道
     :param show: 是否绘图
-    :return: 分段后的信号
+    :return: 分段后的信号数据；数据保存的路径
     """
     exp = [60, 40, 34, 30]
 
@@ -34,7 +34,7 @@ def ecg_signal_cut_and_save(file_path, subject, exp_time, start_time, channel=0,
 
 def ecg_process(raw_signal, exper, path=None):
     """
-    心电信号处理，输入未处理的心电信号，输出心率变异性波形。
+    心电信号处理，输入未处理的心电信号，输出每分钟心跳次数波形。
 
     :param raw_signal: 未处理的心电信号
     :param exper: 实验位次，第几次实验

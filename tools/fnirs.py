@@ -170,9 +170,9 @@ def fnirs_allCHx_plot(ts: ndarray = None, fnirs_signal=None, path: str = None, s
     fig.set_size_inches(12, 8)
 
     if path is not None:
-        fig.suptitle('大脑血红蛋白浓度\n' + path)
+        fig.suptitle('前额脑血红蛋白浓度\n' + path, fontsize=7)
     else:
-        fig.suptitle('大脑血红蛋白浓度')
+        fig.suptitle('前额脑血红蛋白浓度', fontsize=7)
 
     for i in range(5):
         ax[0, i].set_title(CH[i], fontsize=7)
