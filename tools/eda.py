@@ -115,9 +115,9 @@ def plot_scr_v2(ts: ndarray = None,
     fig = plt.figure()
 
     if path is not None:
-        fig.suptitle('EDA处理及SCR检测\n' + path, fontsize=7)
+        fig.suptitle('皮肤电活动\n' + path, fontsize=7)
     else:
-        fig.suptitle('EDA处理及SCR检测', fontsize=7)
+        fig.suptitle('皮肤电活动', fontsize=7)
 
     # filtered signal with onsets, peaks, SCR
     ax1 = fig.add_subplot(311)
@@ -152,13 +152,13 @@ def plot_scr_v2(ts: ndarray = None,
     ax1.axvspan(xmin=ts[onsets][-1], xmax=ts[offsets][-1], facecolor='gray', alpha=0.4, label='SCR')
 
     # 绘制实验开始，进入场景，轮椅启动，距离障碍物最近，轮椅停止位置
-    ax1.vlines(ts[0], ymin, ymax, color='b', linestyles="--", linewidth=MINOR_LW, label='进入场景')
+    ax1.vlines(ts[0], ymin, ymax, color='y', linestyles="--", linewidth=MINOR_LW, label='进入场景')
     ax1.vlines(ts[15 * sampling_rate], ymin, ymax, color='g', linestyles="--", linewidth=MINOR_LW, label='轮椅启动')
     obs_distance_time = [45, 30, 26, 24]  # 距离障碍物最近时的时间点
     ax1.vlines(ts[obs_distance_time[exper - 1] * sampling_rate], ymin, ymax, color='r', linestyles="--",
                linewidth=MINOR_LW, label='距离最近')
     wheelchair_stop_time = [55, 36, 30, 27]
-    ax1.vlines(ts[wheelchair_stop_time[exper - 1] * sampling_rate], ymin, ymax, color='y', linestyles="--",
+    ax1.vlines(ts[wheelchair_stop_time[exper - 1] * sampling_rate], ymin, ymax, color='b', linestyles="--",
                linewidth=MINOR_LW, label='轮椅停止')
 
     ax1.set_ylabel('uS')
